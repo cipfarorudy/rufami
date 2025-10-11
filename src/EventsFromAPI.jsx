@@ -1,6 +1,10 @@
 // Données initiales
 // À adapter selon votre backend
-import React, { useState } from 'react'; const API_URL = 'http://localhost:3000/api/events';
+import React, { useState } from 'react';
+import CoffreFort from "./CoffreFort.jsx";
+import CitoyenAction from "./CitoyenAction.jsx";
+import FormationsCIPFARO from "./FormationsCIPFARO.jsx";
+const API_URL = 'http://localhost:3000/api/events';
 
 // Composant Toast
 function Toast({ message, onClose }) {
@@ -200,13 +204,33 @@ const EventsFromAPI = () => {
 
   return (
     <div className={theme === 'dark' ? 'min-h-screen p-4 grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-900 text-white' : 'min-h-screen p-4 grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-100 text-gray-900'}>
-      <div className="col-span-2 flex justify-end">
+      <div className="col-span-2 flex flex-col md:flex-row justify-between items-center mb-4">
+        <div className="flex gap-2 mb-2 md:mb-0">
+          <a href="https://cipfaro-formations.com/" target="_blank" rel="noopener noreferrer" className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded shadow">CIPFARO Formations</a>
+          <a href="https://farorudy.fr/" target="_blank" rel="noopener noreferrer" className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded shadow">Farorudy.fr</a>
+          <a href="https://cipfaro.org/" target="_blank" rel="noopener noreferrer" className="bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded shadow">CIPFARO.org</a>
+          <a href="https://www.intercariforef.org/formations/details/organisme-11_1780.html" target="_blank" rel="noopener noreferrer" className="bg-yellow-700 hover:bg-yellow-800 text-white px-4 py-2 rounded shadow">Intercariforef</a>
+          <a href="https://www.faromirval.com/" target="_blank" rel="noopener noreferrer" className="bg-pink-700 hover:bg-pink-800 text-white px-4 py-2 rounded shadow">Faromirval</a>
+          <a href="https://certif-icpf.org/certifies/rudy-faro" target="_blank" rel="noopener noreferrer" className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded shadow">Certification ICPF</a>
+          <a href="https://www.linkedin.com/in/rudy-faro/?originalSubdomain=gp" target="_blank" rel="noopener noreferrer" className="bg-blue-900 hover:bg-blue-950 text-white px-4 py-2 rounded shadow">LinkedIn</a>
+          <a href="https://www.youtube.com/@RuddyFARO" target="_blank" rel="noopener noreferrer" className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded shadow">YouTube</a>
+          <a href="https://www.labanquepostale.fr" target="_blank" rel="noopener noreferrer" className="bg-teal-700 hover:bg-teal-800 text-white px-4 py-2 rounded shadow">La Banque Postale</a>
+          <a href="https://www.banxo.fr" target="_blank" rel="noopener noreferrer" className="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded shadow">Banxo</a>
+          <a href="https://www.qonto.com/fr" target="_blank" rel="noopener noreferrer" className="bg-gray-900 hover:bg-gray-950 text-white px-4 py-2 rounded shadow">Qonto</a>
+          <a href="https://chorus-pro.gouv.fr/" target="_blank" rel="noopener noreferrer" className="bg-cyan-700 hover:bg-cyan-800 text-white px-4 py-2 rounded shadow">Chorus Pro</a>
+          <a href="https://ceres-edof.fr/" target="_blank" rel="noopener noreferrer" className="bg-lime-700 hover:bg-lime-800 text-white px-4 py-2 rounded shadow">CERES EDOF</a>
+          <a href="https://www.paypal.com" target="_blank" rel="noopener noreferrer" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow">PayPal</a>
+          <a href="https://authentification-partenaire.portail-emploi.fr/connexion/realms/spe/protocol/openid-connect/auth?client_id=SPE_BASTION_2BA4AB9F29F1F94C4986EC8A0656B0D89A76155CF579768621C4D44A6EAA8EAD&redirect_uri=https%3A%2F%2Fwww.portail-emploi.fr%2Foauth%2Fclient%2Fredirect&response_type=code&state=5DtnERvq4wHSQlRRKeijVvA&code_challenge_method=S256&code_challenge=k4XHIwyEOQlU-fItNYNUdaVJ95kNeFCncblCPDTXrJ8" target="_blank" rel="noopener noreferrer" className="bg-orange-700 hover:bg-orange-800 text-white px-4 py-2 rounded shadow">Portail Emploi (Connexion Partenaire)</a>
+        </div>
         <ThemeSwitch theme={theme} setTheme={setTheme} />
       </div>
       <Agenda showToast={showToast} events={events} setEvents={setEvents} onFetch={fetchEventsFromAPI} />
       <Calendar />
       <BlocNote showToast={showToast} />
-      <Annuaire showToast={showToast} />
+  <Annuaire showToast={showToast} />
+  <CoffreFort showToast={showToast} />
+  <CitoyenAction showToast={showToast} />
+  <FormationsCIPFARO showToast={showToast} />
       <Toast message={toast} onClose={() => setToast('')} />
     </div>
   );
