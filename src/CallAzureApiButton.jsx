@@ -1,28 +1,15 @@
 
+
 import React, { useState } from 'react';
-import { useMsal } from '@azure/msal-react';
 
 function CallAzureApiButton() {
-  const { instance } = useMsal();
   const [apiData, setApiData] = useState(null);
   const [error, setError] = useState(null);
 
+  // Stub : appel API désactivé, affiche un message
   const callApi = async () => {
-    const apiScope = 'api://VOTRE_API_CLIENT_ID/.default';
-    const apiUrl = 'https://votre-api.azurewebsites.net/endpoint';
-    try {
-      const response = await instance.acquireTokenSilent({ scopes: [apiScope] });
-      const token = response.accessToken;
-      const apiResponse = await fetch(apiUrl, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await apiResponse.json();
-      setApiData(data);
-      setError(null);
-    } catch (err) {
-      setError(err.message || 'Erreur appel API Azure');
-      setApiData(null);
-    }
+    setError("Connexion Azure désactivée. Impossible d’appeler l’API.");
+    setApiData(null);
   };
 
   return (

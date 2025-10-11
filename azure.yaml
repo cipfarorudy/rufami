@@ -1,0 +1,10 @@
+# Fichier de configuration Azure Static Web Apps pour une application React
+# Placez ce fichier à la racine du projet
+
+app_location: "."
+api_location: "api"
+output_location: "build"
+
+# app_location : dossier contenant le code source (ici racine)
+# api_location : dossier pour les fonctions Azure (optionnel, ici "api" si besoin)
+# output_location : dossier généré par le build (ici "build")

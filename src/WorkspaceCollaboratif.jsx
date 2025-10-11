@@ -1,40 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CallAzureApiButton from './CallAzureApiButton';
 
-const API_URL = 'https://api.exemple.com/workspace'; // Remplacez par l’URL réelle
+// Connexion API désactivée pour accès libre à l'espace de travail
 
 const WorkspaceCollaboratif = () => {
-  const [projects, setProjects] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetch(`${API_URL}/projects`).then(res => res.json()),
-      fetch(`${API_URL}/users`).then(res => res.json())
-    ]).then(([projectsData, usersData]) => {
-      setProjects(projectsData);
-      setUsers(usersData);
-      setLoading(false);
-    });
-  }, []);
+  const [projects, setProjects] = useState([
+    { id: 1, name: 'Projet Alpha' },
+    { id: 2, name: 'Projet Beta' }
+  ]);
+  const [users, setUsers] = useState([
+    { id: 1, name: 'Alice' },
+    { id: 2, name: 'Bob' }
+  ]);
 
   const addProject = (name) => {
-    fetch(`${API_URL}/projects`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name })
-    })
-      .then(res => res.json())
-      .then(newProject => setProjects([...projects, newProject]));
+    const newProject = { id: Date.now(), name };
+    setProjects([...projects, newProject]);
   };
 
   const removeUser = (id) => {
-    fetch(`${API_URL}/users/${id}`, { method: 'DELETE' })
-      .then(() => setUsers(users.filter(u => u.id !== id)));
+    setUsers(users.filter(u => u.id !== id));
   };
-
-  if (loading) return <div>Chargement...</div>;
 
   return (
     <div className="p-6">
