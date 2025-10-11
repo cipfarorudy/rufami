@@ -57,26 +57,35 @@ function CoffreFort({ showToast }) {
     <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow mt-4">
       <h2 className="text-lg font-bold mb-2">Coffre-fort (codes & mots de passe)</h2>
       <form onSubmit={editIndex === null ? handleAdd : handleUpdate} className="flex flex-col md:flex-row gap-2 mb-4">
+        <label htmlFor="coffre-site" className="sr-only">Site ou service</label>
         <input
+          id="coffre-site"
           type="text"
           placeholder="Site ou service"
           value={site}
           onChange={e => setSite(e.target.value)}
           className="px-2 py-1 rounded border"
+          aria-label="Site ou service"
         />
+        <label htmlFor="coffre-login" className="sr-only">Identifiant</label>
         <input
+          id="coffre-login"
           type="text"
           placeholder="Identifiant"
           value={login}
           onChange={e => setLogin(e.target.value)}
           className="px-2 py-1 rounded border"
+          aria-label="Identifiant"
         />
+        <label htmlFor="coffre-password" className="sr-only">Mot de passe|code</label>
         <input
+          id="coffre-password"
           type="password"
           placeholder="Mot de passe/code"
           value={password}
           onChange={e => setPassword(e.target.value)}
           className="px-2 py-1 rounded border"
+          aria-label="Mot de passe|code"
         />
         <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">
           {editIndex === null ? "Ajouter" : "Modifier"}
@@ -87,7 +96,7 @@ function CoffreFort({ showToast }) {
       </form>
       <ul className="space-y-2">
         {entries.map((entry, idx) => (
-          <li key={idx} className="flex flex-col md:flex-row items-center justify-between bg-white dark:bg-gray-700 p-2 rounded shadow">
+          <li key={idx} data-testid="coffre-item" className="flex flex-col md:flex-row items-center justify-between bg-white dark:bg-gray-700 p-2 rounded shadow">
             <div className="flex-1">
               <span className="font-semibold">{entry.site}</span> — <span>{entry.login}</span> — <span className="font-mono">••••••••</span>
             </div>
