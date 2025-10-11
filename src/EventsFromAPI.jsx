@@ -12,9 +12,10 @@ const API_URL = 'https://lemon-pebble-0d7cdbb10.2.azurestaticapps.net/api/events
 function Toast({ message, onClose }) {
   if (!message) return null;
   return (
-    <div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50 animate-fade-in">
-      {message}
-      <button onClick={onClose} className="ml-4 text-white font-bold">×</button>
+    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 min-w-[300px] max-w-lg bg-gradient-to-r from-green-500 via-green-400 to-green-600 text-white px-6 py-3 rounded-2xl shadow-2xl z-50 flex items-center gap-4 animate-fade-in">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4" /></svg>
+      <span className="flex-1 font-semibold text-lg">{message}</span>
+      <button onClick={onClose} className="ml-2 text-white font-bold text-2xl hover:text-green-300 transition">×</button>
     </div>
   );
 }
@@ -225,14 +226,14 @@ function Annuaire({ showToast }) {
 
 function DashboardPresentation() {
   return (
-    <div className="p-8 bg-white rounded shadow text-center mb-8">
-      <h2 className="text-2xl font-bold mb-2">Bienvenue sur votre bureau collaboratif</h2>
-      <p className="text-gray-600 mb-4">Accédez à tous vos outils depuis le tableau de bord : agenda, calendrier, bloc-notes, annuaire, coffre-fort, liens rapides, etc.</p>
+    <div className="p-8 bg-white rounded-2xl shadow-2xl text-center mb-8 animate-fade-in">
+      <h2 className="text-3xl font-extrabold mb-2 text-blue-700">Bienvenue sur votre bureau collaboratif</h2>
+      <p className="text-gray-600 mb-4 text-lg">Accédez à tous vos outils depuis le tableau de bord : agenda, calendrier, bloc-notes, annuaire, coffre-fort, liens rapides, etc.</p>
       <div className="flex flex-wrap justify-center gap-4 mt-4">
-        <span className="px-4 py-2 bg-blue-100 rounded text-blue-700">Organisation</span>
-        <span className="px-4 py-2 bg-green-100 rounded text-green-700">Collaboration</span>
-        <span className="px-4 py-2 bg-yellow-100 rounded text-yellow-700">Sécurité</span>
-        <span className="px-4 py-2 bg-purple-100 rounded text-purple-700">Productivité</span>
+        <span className="px-4 py-2 bg-blue-100 rounded-xl text-blue-700 flex items-center gap-2"><i className="fas fa-calendar-alt text-blue-500"></i> Organisation</span>
+        <span className="px-4 py-2 bg-green-100 rounded-xl text-green-700 flex items-center gap-2"><i className="fas fa-users text-green-500"></i> Collaboration</span>
+        <span className="px-4 py-2 bg-yellow-100 rounded-xl text-yellow-700 flex items-center gap-2"><i className="fas fa-lock text-yellow-500"></i> Sécurité</span>
+        <span className="px-4 py-2 bg-purple-100 rounded-xl text-purple-700 flex items-center gap-2"><i className="fas fa-bolt text-purple-500"></i> Productivité</span>
       </div>
     </div>
   );
@@ -274,22 +275,22 @@ const EventsFromAPI = () => {
   };
 
   return (
-    <div className={theme === 'dark' ? 'min-h-screen flex bg-gray-900 text-white' : 'min-h-screen flex bg-gray-100 text-gray-900'}>
+    <div className={theme === 'dark' ? 'min-h-screen flex bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white' : 'min-h-screen flex bg-gradient-to-br from-blue-100 via-purple-100 to-yellow-50 text-gray-900'}>
       {/* Barre latérale */}
-      <aside className={theme === 'dark' ? 'w-64 min-h-screen bg-gray-800 text-white flex flex-col p-4 shadow-xl' : 'w-64 min-h-screen bg-white text-gray-900 flex flex-col p-4 shadow-xl'}>
+  <aside className={theme === 'dark' ? 'w-64 min-h-screen bg-gray-800 text-white flex flex-col p-4 shadow-2xl rounded-r-2xl' : 'w-64 min-h-screen bg-white text-gray-900 flex flex-col p-4 shadow-2xl rounded-r-2xl'}>
         <div className="mb-8">
           <h1 className="text-2xl font-bold mb-2">Espace collaboratif</h1>
           <span className="text-sm opacity-70">Bureau rangé et fonctionnel</span>
         </div>
         <nav className="flex flex-col gap-2">
-          <a href="#agenda" className="hover:bg-blue-100 dark:hover:bg-gray-700 px-3 py-2 rounded">Agenda</a>
-          <a href="#calendrier" className="hover:bg-blue-100 dark:hover:bg-gray-700 px-3 py-2 rounded">Calendrier</a>
-          <a href="#blocnote" className="hover:bg-blue-100 dark:hover:bg-gray-700 px-3 py-2 rounded">Bloc-notes</a>
-          <a href="#annuaire" className="hover:bg-blue-100 dark:hover:bg-gray-700 px-3 py-2 rounded">Annuaire</a>
-          <a href="#coffre" className="hover:bg-blue-100 dark:hover:bg-gray-700 px-3 py-2 rounded">Coffre-fort</a>
-          <a href="#liens" className="hover:bg-blue-100 dark:hover:bg-gray-700 px-3 py-2 rounded">Liens rapides</a>
-          <a href="#citoyen" className="hover:bg-blue-100 dark:hover:bg-gray-700 px-3 py-2 rounded">CitoyenAction</a>
-          <a href="#formations" className="hover:bg-blue-100 dark:hover:bg-gray-700 px-3 py-2 rounded">Formations CIPFARO</a>
+          <a href="#agenda" className="flex items-center gap-2 hover:bg-blue-200 dark:hover:bg-gray-700 px-3 py-2 rounded-xl transition font-semibold"><i className="fas fa-calendar-alt text-blue-500"></i> Agenda</a>
+          <a href="#calendrier" className="flex items-center gap-2 hover:bg-blue-200 dark:hover:bg-gray-700 px-3 py-2 rounded-xl transition font-semibold"><i className="fas fa-calendar text-indigo-500"></i> Calendrier</a>
+          <a href="#blocnote" className="flex items-center gap-2 hover:bg-blue-200 dark:hover:bg-gray-700 px-3 py-2 rounded-xl transition font-semibold"><i className="fas fa-sticky-note text-yellow-500"></i> Bloc-notes</a>
+          <a href="#annuaire" className="flex items-center gap-2 hover:bg-blue-200 dark:hover:bg-gray-700 px-3 py-2 rounded-xl transition font-semibold"><i className="fas fa-address-book text-green-500"></i> Annuaire</a>
+          <a href="#coffre" className="flex items-center gap-2 hover:bg-blue-200 dark:hover:bg-gray-700 px-3 py-2 rounded-xl transition font-semibold"><i className="fas fa-lock text-yellow-500"></i> Coffre-fort</a>
+          <a href="#liens" className="flex items-center gap-2 hover:bg-blue-200 dark:hover:bg-gray-700 px-3 py-2 rounded-xl transition font-semibold"><i className="fas fa-link text-purple-500"></i> Liens rapides</a>
+          <a href="#citoyen" className="flex items-center gap-2 hover:bg-blue-200 dark:hover:bg-gray-700 px-3 py-2 rounded-xl transition font-semibold"><i className="fas fa-user-shield text-blue-500"></i> CitoyenAction</a>
+          <a href="#formations" className="flex items-center gap-2 hover:bg-blue-200 dark:hover:bg-gray-700 px-3 py-2 rounded-xl transition font-semibold"><i className="fas fa-graduation-cap text-green-500"></i> Formations CIPFARO</a>
         </nav>
         <div className="mt-auto pt-8">
           <ThemeSwitch theme={theme} setTheme={setTheme} />
