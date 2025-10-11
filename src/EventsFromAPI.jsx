@@ -19,12 +19,51 @@ function Toast({ message, onClose }) {
   );
 }
 
-function AlertBanner({ error, onClose }) {
+function AlertBanner({ error, onClose, onRetry }) {
+  const [shaking, setShaking] = React.useState(false);
+  React.useEffect(() => {
+    if (error) {
+      setShaking(true);
+      const timer = setTimeout(() => setShaking(false), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  // Copier le message
+  const handleCopy = () => {
+    if (error) navigator.clipboard.writeText(error);
+  };
+
   if (!error) return null;
   return (
-    <div className="fixed top-0 left-0 w-full bg-red-600 text-white px-4 py-2 shadow-lg z-50 flex justify-between items-center animate-fade-in">
-      <span>{error}</span>
-      <button onClick={onClose} className="ml-4 text-white font-bold">×</button>
+    <div className={`fixed top-0 left-0 w-full max-w-2xl mx-auto bg-gradient-to-r from-red-700 via-red-600 to-red-500 text-white px-6 py-3 rounded-b-2xl shadow-2xl z-50 flex flex-col md:flex-row justify-between items-center animate-fade-in ${shaking ? 'animate-shake' : ''}`} style={{left: '50%', transform: 'translateX(-50%)'}}>
+      <span className="flex items-center gap-4 text-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>
+          <strong className="text-xl">Impossible de récupérer les données.</strong> <br />
+          <span className="text-base">Vérifiez votre connexion ou réessayez.</span> <br />
+          <span className="text-xs opacity-80">Détail : {error}</span>
+        </span>
+      </span>
+      <div className="flex gap-2 mt-2 md:mt-0">
+        <button onClick={handleCopy} className="bg-white text-red-600 px-3 py-1 rounded-lg font-bold shadow hover:bg-red-100 transition">Copier</button>
+        {onRetry && <button onClick={onRetry} className="bg-white text-red-600 px-3 py-1 rounded-lg font-bold shadow hover:bg-red-100 transition">Réessayer</button>}
+        <a href="https://faq.rufami.fr" target="_blank" rel="noopener noreferrer" className="bg-white text-blue-600 px-3 py-1 rounded-lg font-bold shadow hover:bg-blue-100 transition">FAQ</a>
+        <button onClick={onClose} className="ml-2 text-white font-bold text-2xl hover:text-red-300 transition">×</button>
+      </div>
+      <style>{`
+        @keyframes shake {
+          0% { transform: translateX(0); }
+          20% { transform: translateX(-8px); }
+          40% { transform: translateX(8px); }
+          60% { transform: translateX(-8px); }
+          80% { transform: translateX(8px); }
+          100% { transform: translateX(0); }
+        }
+        .animate-shake {
+          animation: shake 0.6s;
+        }
+      `}</style>
     </div>
   );
 }
@@ -285,7 +324,7 @@ const EventsFromAPI = () => {
             <FormationsCIPFARO showToast={showToast} />
           </section>
         </div>
-        <AlertBanner error={error} onClose={() => setError('')} />
+        <AlertBanner error={error} onClose={() => setError('')} onRetry={error ? fetchEventsFromAPI : null} />
         <Toast message={toast} onClose={() => setToast('')} />
       </main>
     </div>
