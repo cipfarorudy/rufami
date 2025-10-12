@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/bdf51064-432f-49d2-a5e4-7b368e014313/resourceGroups/rufaromirval/providers/Microsoft.Web/sites/rufami-app",
+    "appService.deploySubpath": "rufami-app"
+}
