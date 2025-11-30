@@ -1,87 +1,94 @@
 # Rufami App - AI Coding Guidelines
 
 ## Architecture Overview
-This is a React 19 application built with Create React App that integrates dual authentication (Azure AD + Google OAuth) with collaborative workspace features and external API consumption.
+Application React 19 (Create React App) déployée sur **Azure Static Web Apps**. Bureau collaboratif modulaire avec persistance localStorage.
 
-**Core Components:**
-- `AzureAuthProvider.jsx`: MSAL-based Azure AD authentication wrapper
-- `GoogleAuth.jsx`: Google OAuth integration in header
-- `WorkspaceCollaboratif.jsx`: Project/user management with CRUD operations
-- `EventsFromAPI.jsx`: Event display from external API
-- `CallAzureApiButton.jsx`: Azure API calls with token authentication
+**Structure de l'app** (`src/App.jsx`):
+- `AzureAuthProvider` wraps l'app (actuellement stub passthrough)
+- `react-router-dom` v7 pour la navigation entre modules
+- Header avec `GoogleAuth` (stub) + navigation principale
 
-**Data Flow:**
-- Authentication providers wrap the entire app
-- Components make direct `fetch()` calls to external APIs
-- Azure API calls require MSAL token acquisition
-- State managed locally with React hooks (useState/useEffect)
+**Modules fonctionnels** (routes dans `App.jsx`):
+| Route | Composant | État |
+|-------|-----------|------|
+| `/` | `EventsFromAPI` | Dashboard principal avec tous les widgets |
+| `/collaboratif` | `WorkspaceCollaboratif` | Gestion projets/utilisateurs |
+| `/agenda`, `/calendrier`, `/blocnote`, `/annuaire` | Composants individuels | Pages "en construction" |
+| `/coffrefort` | `CoffreFort` | Gestionnaire mots de passe (localStorage) |
+| `/citoyenaction`, `/formations` | `CitoyenAction`, `FormationsCIPFARO` | Gestionnaires de liens |
+| `/liens` | `GestionLiens` | Liens rapides catégorisés |
 
-## Authentication Setup
-**Azure AD Integration:**
-- Uses `@azure/msal-browser` and `@azure/msal-react`
-- Replace `VOTRE_CLIENT_ID_AZURE_AD` in `AzureAuthProvider.jsx`
-- API scope: `api://VOTRE_API_CLIENT_ID/.default`
-- Token acquired via `instance.acquireTokenSilent()`
+## Patterns de données
 
-**Google OAuth:**
-- Uses `@react-oauth/google`
-- Replace `VOTRE_CLIENT_ID_ICI` in `GoogleAuth.jsx`
-- Integrated in header component
+**Persistance localStorage** - Hook réutilisable dans `EventsFromAPI.jsx`:
+```jsx
+function useLocalStorage(key, initialValue) {
+  const [value, setValue] = useState(() => {
+    const stored = localStorage.getItem(key);
+    return stored ? JSON.parse(stored) : initialValue;
+  });
+  const setAndStore = v => { setValue(v); localStorage.setItem(key, JSON.stringify(v)); };
+  return [value, setAndStore];
+}
+```
+Clés utilisées: `agendaEvents`, `blocNote`, `annuaireContacts`, `coffreFort`, `liensPerso`, `citoyenActionLinks`, `formationsCIPFAROLinks`
 
-## API Integration Patterns
-**External API Calls:**
-- Direct `fetch()` calls without dedicated API layer
-- Placeholder URLs: `https://api.exemple.com/*`
-- Replace with actual endpoints before deployment
-- Error handling via `.catch()` blocks
+**Pattern CRUD uniforme** (voir `CoffreFort.jsx`, `GestionLiens.jsx`):
+- État local + sync localStorage via `saveEntries()`
+- Formulaire avec `editIndex` pour basculer ajout/modification
+- Boutons: Ajouter/Modifier (blue-600), Supprimer (red-600), Annuler (gray-400)
 
-**Azure API Calls:**
-- Always acquire token first: `await instance.acquireTokenSilent({ scopes: [apiScope] })`
-- Include Bearer token in Authorization header
-- Handle token acquisition errors
+## API & Authentification
 
-## Styling Conventions
-**Tailwind CSS:**
-- Utility-first approach throughout
-- Responsive design with `sm:`, `lg:` prefixes
-- Color scheme: gray-100 backgrounds, blue-600 primary buttons
-- Layout uses flexbox/grid: `flex`, `grid grid-cols-1 lg:grid-cols-2`
+**État actuel**: Auth désactivée pour accès libre
+- `AzureAuthProvider.jsx`: Passthrough `<>{children}</>`
+- `GoogleAuth.jsx`: Passthrough
+- `CallAzureApiButton.jsx`: Stub avec message d'erreur
 
-**Component Structure:**
-- Consistent padding: `p-6`, `px-4 py-8`
-- Button styling: `bg-blue-600 text-white px-4 py-2 rounded-md`
-- List items: `p-2 bg-gray-100 rounded mb-2`
+**API externe** (`EventsFromAPI.jsx`):
+```jsx
+const API_URL = 'https://lemon-pebble-0d7cdbb10.2.azurestaticapps.net/api/events';
+```
 
-## Development Workflow
-**Build Commands:**
-- `npm start`: Development server on localhost:3000
-- `npm run build`: Production build to `/build`
-- `npm test`: Jest test runner
-- `npm run eject`: CRA ejection (irreversible)
+**Pour réactiver Azure AD**: Réimplémenter MSAL dans `AzureAuthProvider.jsx` avec `@azure/msal-browser` et `@azure/msal-react` (déjà en dépendances).
 
-**Key Files to Reference:**
-- `src/App.jsx`: Main app structure and routing
-- `package.json`: Dependencies and scripts
-- `tailwind.config.js`: Tailwind configuration
-- `postcss.config.js`: CSS processing pipeline
+## Styling Tailwind CSS
 
-## Code Patterns
-**State Management:**
-- Local component state with `useState`
-- Side effects with `useEffect`
-- No global state management library
+**Classes communes**:
+- Boutons primaires: `bg-blue-600 text-white px-3 py-1 rounded`
+- Boutons danger: `bg-red-600 text-white px-2 py-1 rounded`
+- Cards: `bg-white dark:bg-gray-700 p-4 rounded shadow`
+- Inputs: `px-2 py-1 rounded border`
 
-**Error Handling:**
-- API errors caught in `.catch()` blocks
-- Display error messages in red text: `text-red-600`
+**Mode sombre**: Toggle via état `theme` dans `EventsFromAPI.jsx`, appliqué à `document.body.className`
 
-**Language:**
-- UI text in French
-- Code comments and console logs in French
+**Responsive**: `flex-col md:flex-row`, `grid-cols-1 md:grid-cols-2 xl:grid-cols-3`
 
-## Deployment Notes
-- Build output goes to `/build` directory
-- Static hosting ready (contains `index.html`, assets, etc.)
-- Requires environment variables for client IDs and API URLs
-- No server-side rendering or backend included</content>
-<parameter name="filePath">c:\Users\CIP FARO\rufami-app\rufami-app\.github\copilot-instructions.md
+## Composants UI réutilisables
+
+Dans `EventsFromAPI.jsx`:
+- `Toast({ message, onClose })`: Notification verte en bas
+- `AlertBanner({ error, onClose, onRetry })`: Bannière d'erreur rouge en haut avec animation shake
+- `ThemeSwitch({ theme, setTheme })`: Toggle mode clair/sombre
+
+**Pattern showToast**: Passé en prop aux composants enfants pour notifications contextuelles.
+
+## Développement & Déploiement
+
+```bash
+npm start      # Dev server localhost:3000
+npm run build  # Production → /build
+npm test       # Jest + React Testing Library
+```
+
+**Azure Static Web Apps** (`azure.yaml`):
+- `app_location: "."` (racine)
+- `output_location: "build"`
+- `api_location: "api"` (Azure Functions, si utilisé)
+
+## Conventions
+
+- **Langue UI**: Français
+- **Icônes**: FontAwesome (`@fortawesome/react-fontawesome`) + Lucide React
+- **IDs accessibilité**: Labels `sr-only` + `aria-label` sur inputs
+- **Data-testid**: Utilisé pour navigation (`data-testid="nav-dashboard"`, etc.)
