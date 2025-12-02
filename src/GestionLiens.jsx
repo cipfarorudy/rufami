@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useLocalStorage } from './hooks/useLocalStorage';
+import React from "react";
+import CRUDList from './components/CRUDList';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBuilding, faGraduationCap, faCloud, faEnvelope, faBank, faIdCard, faGlobe, faHandshake, faLock, faLink
@@ -59,70 +59,24 @@ const categories = [
 ];
 
 function GestionLiens() {
-  const [links, setLinks] = useLocalStorage('liensPerso', defaultLinks);
-  const [form, setForm] = useState({ label: "", url: "", category: "pro", icon: "" });
-  const [editIndex, setEditIndex] = useState(null);
-
-  const saveLinks = (newLinks) => {
-    setLinks(newLinks);
-  };
-
-  const handleAdd = (e) => {
-    e.preventDefault();
-    if (!form.label || !form.url) return;
-    saveLinks([...links, { ...form }]);
-    setForm({ label: "", url: "", category: "pro", icon: "" });
-  };
-
-  const handleDelete = (idx) => {
-    saveLinks(links.filter((_, i) => i !== idx));
-  };
-
-  const handleEdit = (idx) => {
-    setEditIndex(idx);
-    setForm(links[idx]);
-  };
-
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    if (editIndex === null) return;
-    const newLinks = links.map((l, i) => (i === editIndex ? { ...form } : l));
-    saveLinks(newLinks);
-    setEditIndex(null);
-    setForm({ label: "", url: "", category: "pro", icon: "" });
-  };
-
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded shadow mt-4">
-      <h2 className="text-lg font-bold mb-2">Gestion des liens rapides</h2>
-      <form onSubmit={editIndex === null ? handleAdd : handleUpdate} className="flex flex-col md:flex-row gap-2 mb-4">
-        <input type="text" placeholder="Nom du lien" value={form.label} onChange={e => setForm(f => ({ ...f, label: e.target.value }))} className="px-2 py-1 rounded border" required />
-        <input type="url" placeholder="URL" value={form.url} onChange={e => setForm(f => ({ ...f, url: e.target.value }))} className="px-2 py-1 rounded border" required />
-        <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))} className="px-2 py-1 rounded border">
-          {categories.map(cat => <option key={cat.key} value={cat.key}>{cat.label}</option>)}
-        </select>
-        <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">{editIndex === null ? "Ajouter" : "Modifier"}</button>
-        {editIndex !== null && (
-          <button type="button" onClick={() => { setEditIndex(null); setForm({ label: "", url: "", category: "pro", icon: "" }); }} className="bg-gray-400 text-white px-3 py-1 rounded">Annuler</button>
-        )}
-      </form>
-      <ul className="space-y-2">
-        {links.map((l, idx) => (
-          <li key={idx} className="flex flex-col md:flex-row items-center justify-between bg-gray-50 dark:bg-gray-700 p-2 rounded shadow">
-            <div className="flex items-center gap-2">
-              <FontAwesomeIcon icon={l.icon || faLink} />
-              <span className="font-semibold">{l.label}</span>
-              <a href={l.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline ml-2">Ouvrir</a>
-            </div>
-            <div className="flex gap-2 mt-2 md:mt-0">
-              <button onClick={() => handleEdit(idx)} className="bg-yellow-500 text-white px-2 py-1 rounded">Modifier</button>
-              <button onClick={() => handleDelete(idx)} className="bg-red-600 text-white px-2 py-1 rounded">Supprimer</button>
-            </div>
-          </li>
-        ))}
-        {links.length === 0 && <li className="text-gray-500">Aucun lien enregistré.</li>}
-      </ul>
-    </div>
+    <CRUDList
+      storageKey="liensPerso"
+      initialItems={defaultLinks}
+      title="Gestion des liens rapides"
+      fields={[
+        { name: 'label', label: 'Nom du lien' },
+        { name: 'url', label: 'URL', type: 'url' },
+        { name: 'category', label: 'Catégorie', type: 'select', options: categories.map(c => ({ value: c.key, label: c.label })) }
+      ]}
+      itemRender={(l) => (
+        <div className="flex items-center gap-2">
+          <FontAwesomeIcon icon={l.icon || faLink} />
+          <span className="font-semibold">{l.label}</span>
+          <a href={l.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline ml-2">Ouvrir</a>
+        </div>
+      )}
+    />
   );
 }
 

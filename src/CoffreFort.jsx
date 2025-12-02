@@ -1,111 +1,22 @@
-import React, { useState } from "react";
-import { useLocalStorage } from './hooks/useLocalStorage';
+import React from "react";
+import CRUDList from './components/CRUDList';
 
 function CoffreFort({ showToast }) {
-  const [entries, setEntries] = useLocalStorage('coffreFort', []);
-  const [site, setSite] = useState("");
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
-  const [editIndex, setEditIndex] = useState(null);
-
-  const saveEntries = (newEntries) => {
-    setEntries(newEntries);
-  };
-
-  const handleAdd = (e) => {
-    e.preventDefault();
-    if (!site || !login || !password) return;
-    const newEntries = [...entries, { site, login, password }];
-    saveEntries(newEntries);
-    setSite("");
-    setLogin("");
-    setPassword("");
-    showToast && showToast("Ajouté au coffre-fort");
-  };
-
-  const handleDelete = (idx) => {
-    const newEntries = entries.filter((_, i) => i !== idx);
-    saveEntries(newEntries);
-    showToast && showToast("Supprimé du coffre-fort");
-  };
-
-  const handleEdit = (idx) => {
-    setEditIndex(idx);
-    setSite(entries[idx].site);
-    setLogin(entries[idx].login);
-    setPassword(entries[idx].password);
-  };
-
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    if (editIndex === null) return;
-    const newEntries = entries.map((entry, i) =>
-      i === editIndex ? { site, login, password } : entry
-    );
-    saveEntries(newEntries);
-    setEditIndex(null);
-    setSite("");
-    setLogin("");
-    setPassword("");
-    showToast && showToast("Modifié dans le coffre-fort");
-  };
-
   return (
-    <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow mt-4">
-      <h2 className="text-lg font-bold mb-2">Coffre-fort (codes & mots de passe)</h2>
-      <form onSubmit={editIndex === null ? handleAdd : handleUpdate} className="flex flex-col md:flex-row gap-2 mb-4">
-        <label htmlFor="coffre-site" className="sr-only">Site ou service</label>
-        <input
-          id="coffre-site"
-          type="text"
-          placeholder="Site ou service"
-          value={site}
-          onChange={e => setSite(e.target.value)}
-          className="px-2 py-1 rounded border"
-          aria-label="Site ou service"
-        />
-        <label htmlFor="coffre-login" className="sr-only">Identifiant</label>
-        <input
-          id="coffre-login"
-          type="text"
-          placeholder="Identifiant"
-          value={login}
-          onChange={e => setLogin(e.target.value)}
-          className="px-2 py-1 rounded border"
-          aria-label="Identifiant"
-        />
-        <label htmlFor="coffre-password" className="sr-only">Mot de passe|code</label>
-        <input
-          id="coffre-password"
-          type="password"
-          placeholder="Mot de passe/code"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          className="px-2 py-1 rounded border"
-          aria-label="Mot de passe|code"
-        />
-        <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">
-          {editIndex === null ? "Ajouter" : "Modifier"}
-        </button>
-        {editIndex !== null && (
-          <button type="button" onClick={() => { setEditIndex(null); setSite(""); setLogin(""); setPassword(""); }} className="bg-gray-400 text-white px-3 py-1 rounded">Annuler</button>
-        )}
-      </form>
-      <ul className="space-y-2">
-        {entries.map((entry, idx) => (
-          <li key={idx} data-testid="coffre-item" className="flex flex-col md:flex-row items-center justify-between bg-white dark:bg-gray-700 p-2 rounded shadow">
-            <div className="flex-1">
-              <span className="font-semibold">{entry.site}</span> — <span>{entry.login}</span> — <span className="font-mono">••••••••</span>
-            </div>
-            <div className="flex gap-2 mt-2 md:mt-0">
-              <button onClick={() => handleEdit(idx)} className="bg-yellow-500 text-white px-2 py-1 rounded">Modifier</button>
-              <button onClick={() => handleDelete(idx)} className="bg-red-600 text-white px-2 py-1 rounded">Supprimer</button>
-            </div>
-          </li>
-        ))}
-        {entries.length === 0 && <li className="text-gray-500">Aucune entrée enregistrée.</li>}
-      </ul>
-    </div>
+    <CRUDList
+      storageKey="coffreFort"
+      initialItems={[]}
+      title="Coffre-fort (codes & mots de passe)"
+      fields={[
+        { name: 'site', label: 'Site ou service' },
+        { name: 'login', label: 'Identifiant' },
+        { name: 'password', label: 'Mot de passe/code', type: 'password' }
+      ]}
+      itemRender={(item) => (
+        <span className="font-semibold">{item.site}</span> — <span>{item.login}</span> — <span className="font-mono">••••••••</span>
+      )}
+      showToast={showToast}
+    />
   );
 }
 
