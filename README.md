@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Note: Triggered redeploy on Azure Static Web Apps (1 Dec 2025).
+
 ## Available Scripts
 
 In the project directory, you can run:
