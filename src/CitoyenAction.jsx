@@ -1,18 +1,15 @@
 import React, { useState } from "react";
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 function CitoyenAction({ showToast }) {
-  const [links, setLinks] = useState(() => {
-    const saved = localStorage.getItem("citoyenActionLinks");
-    return saved ? JSON.parse(saved) : [
-      { name: "CitoyenAction", url: "https://citoyenaction-c7hdbehbdza9acha.westus3-01.azurewebsites.net" }
-    ];
-  });
+  const [links, setLinks] = useLocalStorage('citoyenActionLinks', [
+    { name: "CitoyenAction", url: "https://citoyenaction-c7hdbehbdza9acha.westus3-01.azurewebsites.net" }
+  ]);
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
 
   const saveLinks = (newLinks) => {
     setLinks(newLinks);
-    localStorage.setItem("citoyenActionLinks", JSON.stringify(newLinks));
   };
 
   const handleAdd = (e) => {

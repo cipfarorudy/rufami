@@ -1,10 +1,8 @@
 import React, { useState } from "react";
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 function CoffreFort({ showToast }) {
-  const [entries, setEntries] = useState(() => {
-    const saved = localStorage.getItem("coffreFort");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [entries, setEntries] = useLocalStorage('coffreFort', []);
   const [site, setSite] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
@@ -12,7 +10,6 @@ function CoffreFort({ showToast }) {
 
   const saveEntries = (newEntries) => {
     setEntries(newEntries);
-    localStorage.setItem("coffreFort", JSON.stringify(newEntries));
   };
 
   const handleAdd = (e) => {

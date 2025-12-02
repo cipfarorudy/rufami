@@ -1,6 +1,7 @@
 // Données initiales
 // À adapter selon votre backend
 import React, { useState } from 'react';
+import { useLocalStorage } from './hooks/useLocalStorage';
 import CoffreFort from "./CoffreFort.jsx";
 import CitoyenAction from "./CitoyenAction.jsx";
 import FormationsCIPFARO from "./FormationsCIPFARO.jsx";
@@ -92,17 +93,7 @@ const defaultContacts = [
   { id: 3, name: 'Carla Durand', email: 'carla.durand@email.com', phone: '0611121314' }
 ];
 
-function useLocalStorage(key, initialValue) {
-  const [value, setValue] = useState(() => {
-    const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : initialValue;
-  });
-  const setAndStore = v => {
-    setValue(v);
-    localStorage.setItem(key, JSON.stringify(v));
-  };
-  return [value, setAndStore];
-}
+// Hook centralisé importé depuis hooks/useLocalStorage.js
 
 function Agenda({ showToast, events, setEvents, onFetch }) {
   const [title, setTitle] = useState('');

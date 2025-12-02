@@ -1,18 +1,15 @@
 import React, { useState } from "react";
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 function FormationsCIPFARO({ showToast }) {
-  const [links, setLinks] = useState(() => {
-    const saved = localStorage.getItem("formationsCIPFAROLinks");
-    return saved ? JSON.parse(saved) : [
-      { name: "CIPFARO Formations", url: "https://cipfaro-formations.azurewebsites.net" }
-    ];
-  });
+  const [links, setLinks] = useLocalStorage('formationsCIPFAROLinks', [
+    { name: "CIPFARO Formations", url: "https://cipfaro-formations.azurewebsites.net" }
+  ]);
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
 
   const saveLinks = (newLinks) => {
     setLinks(newLinks);
-    localStorage.setItem("formationsCIPFAROLinks", JSON.stringify(newLinks));
   };
 
   const handleAdd = (e) => {

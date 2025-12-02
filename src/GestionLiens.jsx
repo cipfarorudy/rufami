@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocalStorage } from './hooks/useLocalStorage';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBuilding, faGraduationCap, faCloud, faEnvelope, faBank, faIdCard, faGlobe, faHandshake, faLock, faLink
@@ -58,16 +59,12 @@ const categories = [
 ];
 
 function GestionLiens() {
-  const [links, setLinks] = useState(() => {
-    const stored = localStorage.getItem("liensPerso");
-    return stored ? JSON.parse(stored) : defaultLinks;
-  });
+  const [links, setLinks] = useLocalStorage('liensPerso', defaultLinks);
   const [form, setForm] = useState({ label: "", url: "", category: "pro", icon: "" });
   const [editIndex, setEditIndex] = useState(null);
 
   const saveLinks = (newLinks) => {
     setLinks(newLinks);
-    localStorage.setItem("liensPerso", JSON.stringify(newLinks));
   };
 
   const handleAdd = (e) => {
