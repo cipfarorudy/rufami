@@ -20,19 +20,36 @@ const FormationsCIPFARO = lazy(() => import('./FormationsCIPFARO'));
 const GestionLiens = lazy(() => import('./GestionLiens'));
 const FormadevisIntegration = lazy(() => import('./FormadevisIntegration'));
 
+// Composant NavLink amélioré
+const NavLink = ({ to, label, dataTestId }) => {
+  const isActive = window.location.pathname === to;
+  return (
+    <Link
+      to={to}
+      data-testid={dataTestId || to.substring(1) || 'nav-dashboard'}
+      className={`nav-link px-4 py-3 text-sm font-semibold whitespace-nowrap transition-colors duration-200 border-b-2 ${
+        isActive
+          ? 'text-primary-600 dark:text-primary-400 border-primary-600'
+          : 'text-gray-700 dark:text-gray-300 border-transparent hover:text-primary-600 dark:hover:text-primary-400'
+      }`}
+    >
+      {label}
+    </Link>
+  );
+};
 
 const LanguageSwitcher = () => {
   const { lang, changeLang } = useLanguage();
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-1 bg-white dark:bg-gray-700 rounded-full p-0.5 shadow-sm">
       {['fr', 'en', 'es'].map(l => (
         <button
           key={l}
           onClick={() => changeLang(l)}
-          className={`px-2 py-1 rounded text-sm font-semibold transition ${
+          className={`px-3 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
             lang === l
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              ? 'bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-md'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
           }`}
           title={t(`lang.${l}`, lang)}
         >
@@ -47,11 +64,17 @@ const AppContent = () => {
   const { lang } = useLanguage();
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
-        <header className="bg-white shadow-sm">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+        {/* Header avec gradient moderne */}
+        <header className="bg-gradient-header shadow-lg">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-4">
-              <h1 className="text-2xl font-bold text-gray-900">Rufami App</h1>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white rounded-lg shadow-md flex items-center justify-center">
+                  <span className="text-xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">R</span>
+                </div>
+                <h1 className="text-3xl font-bold text-white">Rufami</h1>
+              </div>
               <div className="flex items-center gap-4">
                 <LanguageSwitcher />
                 <GoogleAuth />
@@ -59,23 +82,36 @@ const AppContent = () => {
             </div>
           </div>
         </header>
-        <nav aria-label="Navigation principale" className="flex space-x-2 bg-gray-100 p-2 border-b overflow-x-auto">
-          <Link to="/" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-dashboard">{t('nav.dashboard', lang)}</Link>
-          <Link to="/collaboratif" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-collaboratif">{t('nav.collaboratif', lang)}</Link>
-          <Link to="/agenda" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-agenda">{t('nav.agenda', lang)}</Link>
-          <Link to="/calendrier" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-calendrier">{t('nav.calendar', lang)}</Link>
-          <Link to="/blocnote" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-blocnote">{t('nav.notes', lang)}</Link>
-          <Link to="/annuaire" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-annuaire">{t('nav.directory', lang)}</Link>
-          <Link to="/coffrefort" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-coffrefort">{t('nav.vault', lang)}</Link>
-          <Link to="/citoyenaction" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-citoyenaction">{t('nav.citizen', lang)}</Link>
-          <Link to="/formations" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-formations">{t('nav.training', lang)}</Link>
-          <Link to="/liens" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-liens">{t('nav.links', lang)}</Link>
-          <Link to="/devis" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-devis">{t('nav.devis', lang)}</Link>
+
+        {/* Navigation redessinée */}
+        <nav aria-label="Navigation principale" className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex space-x-0.5 overflow-x-auto scrollbar-hide py-0">
+              <NavLink to="/" label={t('nav.dashboard', lang)} dataTestId="nav-dashboard" />
+              <NavLink to="/collaboratif" label={t('nav.collaboratif', lang)} dataTestId="nav-collaboratif" />
+              <NavLink to="/agenda" label={t('nav.agenda', lang)} dataTestId="nav-agenda" />
+              <NavLink to="/calendrier" label={t('nav.calendar', lang)} dataTestId="nav-calendrier" />
+              <NavLink to="/blocnote" label={t('nav.notes', lang)} dataTestId="nav-blocnote" />
+              <NavLink to="/annuaire" label={t('nav.directory', lang)} dataTestId="nav-annuaire" />
+              <NavLink to="/coffrefort" label={t('nav.vault', lang)} dataTestId="nav-coffrefort" />
+              <NavLink to="/citoyenaction" label={t('nav.citizen', lang)} dataTestId="nav-citoyenaction" />
+              <NavLink to="/formations" label={t('nav.training', lang)} dataTestId="nav-formations" />
+              <NavLink to="/liens" label={t('nav.links', lang)} dataTestId="nav-liens" />
+              <NavLink to="/devis" label={t('nav.devis', lang)} dataTestId="nav-devis" />
+            </div>
+          </div>
         </nav>
+
+        {/* Contenu principal */}
         <main id="contenu-principal" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" role="main">
           <Suspense fallback={
-            <div role="status" aria-live="polite" className="p-4 text-center text-gray-600" data-testid="lazy-loading">
-              Chargement des modules...
+            <div role="status" aria-live="polite" className="p-8 text-center" data-testid="lazy-loading">
+              <div className="animate-pulse flex justify-center items-center gap-2">
+                <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{animationDelay: '0s'}}></div>
+                <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 mt-3 font-medium">Chargement des modules...</p>
             </div>
           }>
             <Routes>
