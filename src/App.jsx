@@ -11,13 +11,13 @@ import {
   LayoutDashboard,
   Users,
   Calendar as CalendarIcon,
-  Notepad,
+  FileText,
   Users2,
   Lock,
   Zap,
   BookOpen,
   Link2,
-  FileText,
+  Clipboard,
   Info,
 } from 'lucide-react';
 
@@ -34,6 +34,7 @@ const FormationsCIPFARO = lazy(() => import('./FormationsCIPFARO'));
 const GestionLiens = lazy(() => import('./GestionLiens'));
 const FormadevisIntegration = lazy(() => import('./FormadevisIntegration'));
 const About = lazy(() => import('./About'));
+const VaultDiagnostics = lazy(() => import('./VaultDiagnostics'));
 
 // Composant NavLink amélioré avec icônes
 const NavLink = ({ to, label, icon: IconComponent, dataTestId }) => {
@@ -107,7 +108,7 @@ const AppContent = () => {
               <NavLink to="/collaboratif" icon={Users} label={t('nav.collaboratif', lang)} dataTestId="nav-collaboratif" />
               <NavLink to="/agenda" icon={CalendarIcon} label={t('nav.agenda', lang)} dataTestId="nav-agenda" />
               <NavLink to="/calendrier" icon={CalendarIcon} label={t('nav.calendar', lang)} dataTestId="nav-calendrier" />
-              <NavLink to="/blocnote" icon={Notepad} label={t('nav.notes', lang)} dataTestId="nav-blocnote" />
+              <NavLink to="/blocnote" icon={Clipboard} label={t('nav.notes', lang)} dataTestId="nav-blocnote" />
               <NavLink to="/annuaire" icon={Users2} label={t('nav.directory', lang)} dataTestId="nav-annuaire" />
               <NavLink to="/coffrefort" icon={Lock} label={t('nav.vault', lang)} dataTestId="nav-coffrefort" />
               <NavLink to="/citoyenaction" icon={Zap} label={t('nav.citizen', lang)} dataTestId="nav-citoyenaction" />
@@ -155,6 +156,7 @@ const AppContent = () => {
               <Route path="/liens" element={<GestionLiens />} />
               <Route path="/devis" element={<FormadevisIntegration />} />
               <Route path="/about" element={<About />} />
+              <Route path="/vault-diagnostics" element={<VaultDiagnostics />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import CRUDList from './components/CRUDList';
 import { useLanguage } from './context/LanguageContext';
 import { t } from './i18n/translations';
@@ -69,7 +70,11 @@ function CoffreFort({ showToast }) {
             required 
           />
           <p id="master-pass-desc" className="text-xs text-gray-600 dark:text-gray-300">
-            {t('vault.masterPass', lang)} {lang === 'fr' ? 'pour accéder à vos identifiants chiffrés' : lang === 'es' ? 'para acceder a sus credenciales encriptadas' : 'to access your encrypted credentials'}
+            {lang === 'fr' 
+              ? 'Mot de passe pour accéder à vos identifiants chiffrés (PBKDF2 + AES-256)' 
+              : lang === 'es' 
+              ? 'Contraseña para acceder a sus credenciales encriptadas (PBKDF2 + AES-256)' 
+              : 'Password to access your encrypted credentials (PBKDF2 + AES-256)'}
           </p>
           <button 
             type="submit" 
@@ -80,7 +85,23 @@ function CoffreFort({ showToast }) {
             {t('vault.unlock', lang)}
           </button>
         </form>
-        {error && <div className="mt-3 text-red-600 text-sm" role="alert" aria-live="polite">{error}</div>}
+        {error && (
+          <div className="mt-3 p-2 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded" role="alert" aria-live="polite">
+            <p className="text-red-700 dark:text-red-300 text-sm font-semibold">{error}</p>
+            <p className="text-red-600 dark:text-red-400 text-xs mt-1">
+              {lang === 'fr' 
+                ? '💡 Conseil: Vérifiez que le mot de passe est correct (majuscules/minuscules comptent)' 
+                : lang === 'es' 
+                ? '💡 Consejo: Verifica que la contraseña sea correcta (mayúsculas/minúsculas importan)' 
+                : '💡 Tip: Make sure the password is correct (case-sensitive)'}
+            </p>
+          </div>
+        )}
+        <div className="mt-4 pt-3 border-t border-gray-300 dark:border-gray-600">
+          <Link to="/vault-diagnostics" className="text-blue-600 dark:text-blue-400 hover:underline text-xs font-semibold">
+            🔍 {lang === 'fr' ? 'Aide - Problèmes de déverrouillage?' : lang === 'es' ? 'Ayuda - ¿Problemas de desbloqueo?' : 'Help - Unlock issues?'}
+          </Link>
+        </div>
       </div>
     );
   }
