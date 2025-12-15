@@ -54,14 +54,33 @@ function CoffreFort({ showToast }) {
   if (!unlocked) {
     return (
       <div className="bg-white dark:bg-gray-700 p-4 rounded shadow max-w-md">
-        <h3 className="text-xl font-bold mb-2">{t('vault.locked', lang)}</h3>
+        <h3 className="text-xl font-bold mb-2" id="vault-heading">{t('vault.locked', lang)}</h3>
         <p className="text-sm mb-4">{t('vault.desc', lang)}</p>
-        <form onSubmit={handleUnlock} className="flex flex-col gap-2">
+        <form onSubmit={handleUnlock} className="flex flex-col gap-2" aria-labelledby="vault-heading">
           <label className="text-sm font-semibold" htmlFor="master-pass">{t('vault.masterPass', lang)}</label>
-          <input id="master-pass" type="password" value={masterPass} onChange={e => setMasterPass(e.target.value)} className="border rounded px-2 py-1" required />
-          <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded" disabled={!masterPass}>{t('vault.unlock', lang)}</button>
+          <input 
+            id="master-pass" 
+            type="password" 
+            value={masterPass} 
+            onChange={e => setMasterPass(e.target.value)} 
+            className="border rounded px-2 py-1"
+            placeholder={t('vault.masterPass', lang)}
+            aria-describedby="master-pass-desc"
+            required 
+          />
+          <p id="master-pass-desc" className="text-xs text-gray-600 dark:text-gray-300">
+            {t('vault.masterPass', lang)} {lang === 'fr' ? 'pour accéder à vos identifiants chiffrés' : lang === 'es' ? 'para acceder a sus credenciales encriptadas' : 'to access your encrypted credentials'}
+          </p>
+          <button 
+            type="submit" 
+            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors" 
+            disabled={!masterPass}
+            aria-label={t('vault.unlock', lang)}
+          >
+            {t('vault.unlock', lang)}
+          </button>
         </form>
-        {error && <div className="mt-3 text-red-600 text-sm" role="alert">{error}</div>}
+        {error && <div className="mt-3 text-red-600 text-sm" role="alert" aria-live="polite">{error}</div>}
       </div>
     );
   }
