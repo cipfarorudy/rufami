@@ -7,6 +7,19 @@ import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { t } from './i18n/translations';
 import GoogleAuth from './GoogleAuth';
 import NotFound from './NotFound';
+import {
+  LayoutDashboard,
+  Users,
+  Calendar as CalendarIcon,
+  Notepad,
+  Users2,
+  Lock,
+  Zap,
+  BookOpen,
+  Link2,
+  FileText,
+  Info,
+} from 'lucide-react';
 
 // Lazy loaded route components
 const EventsFromAPI = lazy(() => import('./EventsFromAPI'));
@@ -22,20 +35,21 @@ const GestionLiens = lazy(() => import('./GestionLiens'));
 const FormadevisIntegration = lazy(() => import('./FormadevisIntegration'));
 const About = lazy(() => import('./About'));
 
-// Composant NavLink amélioré
-const NavLink = ({ to, label, dataTestId }) => {
+// Composant NavLink amélioré avec icônes
+const NavLink = ({ to, label, icon: IconComponent, dataTestId }) => {
   const isActive = window.location.pathname === to;
   return (
     <Link
       to={to}
       data-testid={dataTestId || to.substring(1) || 'nav-dashboard'}
-      className={`nav-link px-4 py-3 text-sm font-semibold whitespace-nowrap transition-colors duration-200 border-b-2 ${
+      className={`nav-link px-3 py-2 flex items-center gap-2 text-sm font-semibold whitespace-nowrap transition-colors duration-200 border-b-2 ${
         isActive
           ? 'text-primary-600 dark:text-primary-400 border-primary-600'
           : 'text-gray-700 dark:text-gray-300 border-transparent hover:text-primary-600 dark:hover:text-primary-400'
       }`}
     >
-      {label}
+      {IconComponent && <IconComponent size={18} className="flex-shrink-0" />}
+      <span>{label}</span>
     </Link>
   );
 };
@@ -89,17 +103,19 @@ const AppContent = () => {
         <nav aria-label="Navigation principale" className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex space-x-0.5 overflow-x-auto scrollbar-hide py-0">
-              <NavLink to="/" label={t('nav.dashboard', lang)} dataTestId="nav-dashboard" />
-              <NavLink to="/collaboratif" label={t('nav.collaboratif', lang)} dataTestId="nav-collaboratif" />
-              <NavLink to="/agenda" label={t('nav.agenda', lang)} dataTestId="nav-agenda" />
-              <NavLink to="/calendrier" label={t('nav.calendar', lang)} dataTestId="nav-calendrier" />
-              <NavLink to="/blocnote" label={t('nav.notes', lang)} dataTestId="nav-blocnote" />
-              <NavLink to="/annuaire" label={t('nav.directory', lang)} dataTestId="nav-annuaire" />
-              <NavLink to="/coffrefort" label={t('nav.vault', lang)} dataTestId="nav-coffrefort" />
-              <NavLink to="/citoyenaction" label={t('nav.citizen', lang)} dataTestId="nav-citoyenaction" />
-              <NavLink to="/formations" label={t('nav.training', lang)} dataTestId="nav-formations" />
-              <NavLink to="/liens" label={t('nav.links', lang)} dataTestId="nav-liens" />
-              <NavLink to="/devis" label={t('nav.devis', lang)} dataTestId="nav-devis" />              <NavLink to="/about" label={t('ui.about', lang)} dataTestId="nav-about" />            </div>
+              <NavLink to="/" icon={LayoutDashboard} label={t('nav.dashboard', lang)} dataTestId="nav-dashboard" />
+              <NavLink to="/collaboratif" icon={Users} label={t('nav.collaboratif', lang)} dataTestId="nav-collaboratif" />
+              <NavLink to="/agenda" icon={CalendarIcon} label={t('nav.agenda', lang)} dataTestId="nav-agenda" />
+              <NavLink to="/calendrier" icon={CalendarIcon} label={t('nav.calendar', lang)} dataTestId="nav-calendrier" />
+              <NavLink to="/blocnote" icon={Notepad} label={t('nav.notes', lang)} dataTestId="nav-blocnote" />
+              <NavLink to="/annuaire" icon={Users2} label={t('nav.directory', lang)} dataTestId="nav-annuaire" />
+              <NavLink to="/coffrefort" icon={Lock} label={t('nav.vault', lang)} dataTestId="nav-coffrefort" />
+              <NavLink to="/citoyenaction" icon={Zap} label={t('nav.citizen', lang)} dataTestId="nav-citoyenaction" />
+              <NavLink to="/formations" icon={BookOpen} label={t('nav.training', lang)} dataTestId="nav-formations" />
+              <NavLink to="/liens" icon={Link2} label={t('nav.links', lang)} dataTestId="nav-liens" />
+              <NavLink to="/devis" icon={FileText} label={t('nav.devis', lang)} dataTestId="nav-devis" />
+              <NavLink to="/about" icon={Info} label={t('ui.about', lang)} dataTestId="nav-about" />
+            </div>
           </div>
         </nav>
 
