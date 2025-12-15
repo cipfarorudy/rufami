@@ -1,0 +1,32 @@
+{
+  "routes": [
+    {
+      "route": "/*",
+      "serve": "/index.html",
+      "statusCode": 200
+    },
+    {
+      "route": "/api/*",
+      "serve": "api"
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/images/*", "/*.{css,scss,gif,jpg,jpeg,js,png,svg,webp,woff,woff2}"]
+  },
+  "mimeTypes": {
+    ".json": "application/json",
+    ".webmanifest": "application/manifest+json"
+  },
+  "auth": {
+    "identityProviders": {
+      "azureActiveDirectory": {
+        "registration": {
+          "clientIdSettingName": "AZURE_AD_CLIENT_ID",
+          "clientSecretSettingName": "AZURE_AD_CLIENT_SECRET",
+          "openIdConnectConfigurationEndpoint": "https://login.microsoftonline.com/{directoryId}/.well-known/openid-configuration"
+        }
+      }
+    }
+  }
+}
