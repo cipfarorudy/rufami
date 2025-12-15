@@ -18,6 +18,7 @@ const CoffreFort = lazy(() => import('./CoffreFort'));
 const CitoyenAction = lazy(() => import('./CitoyenAction'));
 const FormationsCIPFARO = lazy(() => import('./FormationsCIPFARO'));
 const GestionLiens = lazy(() => import('./GestionLiens'));
+const FormadevisIntegration = lazy(() => import('./FormadevisIntegration'));
 
 
 const LanguageSwitcher = () => {
@@ -69,6 +70,7 @@ const AppContent = () => {
           <Link to="/citoyenaction" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-citoyenaction">{t('nav.citizen', lang)}</Link>
           <Link to="/formations" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-formations">{t('nav.training', lang)}</Link>
           <Link to="/liens" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-liens">{t('nav.links', lang)}</Link>
+          <Link to="/devis" className="px-3 py-2 rounded hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" data-testid="nav-devis">{t('nav.devis', lang)}</Link>
         </nav>
         <main id="contenu-principal" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" role="main">
           <Suspense fallback={
@@ -98,6 +100,7 @@ const AppContent = () => {
               <Route path="/citoyenaction" element={<CitoyenAction />} />
               <Route path="/formations" element={<FormationsCIPFARO />} />
               <Route path="/liens" element={<GestionLiens />} />
+              <Route path="/devis" element={<FormadevisIntegration />} />
             </Routes>
           </Suspense>
         </main>

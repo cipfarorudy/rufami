@@ -26,6 +26,11 @@ const translations = {
   },
   "nav.training": { fr: "Formations", en: "Training", es: "Capacitación" },
   "nav.links": { fr: "Liens", en: "Links", es: "Enlaces" },
+  "nav.devis": {
+    fr: "Demande de Devis",
+    en: "Quote Request",
+    es: "Solicitud de Presupuesto",
+  },
 
   // Vault
   "vault.title": {
@@ -138,6 +143,81 @@ const translations = {
   "lang.fr": { fr: "Français", en: "French", es: "Francés" },
   "lang.en": { fr: "Anglais", en: "English", es: "Inglés" },
   "lang.es": { fr: "Espagnol", en: "Spanish", es: "Español" },
+
+  // Formulaire de Devis
+  "formadevis.title": {
+    fr: "Demande de Devis",
+    en: "Quote Request",
+    es: "Solicitud de Presupuesto",
+  },
+  "formadevis.description": {
+    fr: "Remplissez le formulaire ci-dessous pour demander un devis personnalisé",
+    en: "Fill out the form below to request a personalized quote",
+    es: "Complete el formulario a continuación para solicitar un presupuesto personalizado",
+  },
+  "formadevis.fullName": {
+    fr: "Nom complet",
+    en: "Full Name",
+    es: "Nombre Completo",
+  },
+  "formadevis.email": { fr: "Email", en: "Email", es: "Correo Electrónico" },
+  "formadevis.phone": { fr: "Téléphone", en: "Phone", es: "Teléfono" },
+  "formadevis.projectType": {
+    fr: "Type de projet",
+    en: "Project Type",
+    es: "Tipo de Proyecto",
+  },
+  "formadevis.projectDescription": {
+    fr: "Description du projet",
+    en: "Project Description",
+    es: "Descripción del Proyecto",
+  },
+  "formadevis.budget": {
+    fr: "Budget estimé (€)",
+    en: "Estimated Budget (€)",
+    es: "Presupuesto Estimado (€)",
+  },
+  "formadevis.deadline": {
+    fr: "Délai souhaité",
+    en: "Desired Timeline",
+    es: "Plazo Deseado",
+  },
+  "formadevis.submit": {
+    fr: "Envoyer la demande",
+    en: "Submit Request",
+    es: "Enviar Solicitud",
+  },
+  "formadevis.success": {
+    fr: "Devis demandé avec succès !",
+    en: "Quote request submitted successfully!",
+    es: "¡Solicitud de presupuesto enviada con éxito!",
+  },
+  "formadevis.select": {
+    fr: "-- Sélectionner --",
+    en: "-- Select --",
+    es: "-- Seleccionar --",
+  },
+  "formadevis.webDevelopment": {
+    fr: "Développement web",
+    en: "Web Development",
+    es: "Desarrollo Web",
+  },
+  "formadevis.mobileApp": {
+    fr: "Application mobile",
+    en: "Mobile App",
+    es: "Aplicación Móvil",
+  },
+  "formadevis.ecommerce": {
+    fr: "E-commerce",
+    en: "E-commerce",
+    es: "Comercio Electrónico",
+  },
+  "formadevis.consulting": {
+    fr: "Conseil",
+    en: "Consulting",
+    es: "Consultoría",
+  },
+  "formadevis.other": { fr: "Autre", en: "Other", es: "Otro" },
 };
 
 /**
