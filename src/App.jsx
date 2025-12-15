@@ -6,6 +6,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { t } from './i18n/translations';
 import GoogleAuth from './GoogleAuth';
+import NotFound from './NotFound';
 
 // Lazy loaded route components
 const EventsFromAPI = lazy(() => import('./EventsFromAPI'));
@@ -19,6 +20,7 @@ const CitoyenAction = lazy(() => import('./CitoyenAction'));
 const FormationsCIPFARO = lazy(() => import('./FormationsCIPFARO'));
 const GestionLiens = lazy(() => import('./GestionLiens'));
 const FormadevisIntegration = lazy(() => import('./FormadevisIntegration'));
+const About = lazy(() => import('./About'));
 
 // Composant NavLink amélioré
 const NavLink = ({ to, label, dataTestId }) => {
@@ -97,8 +99,7 @@ const AppContent = () => {
               <NavLink to="/citoyenaction" label={t('nav.citizen', lang)} dataTestId="nav-citoyenaction" />
               <NavLink to="/formations" label={t('nav.training', lang)} dataTestId="nav-formations" />
               <NavLink to="/liens" label={t('nav.links', lang)} dataTestId="nav-liens" />
-              <NavLink to="/devis" label={t('nav.devis', lang)} dataTestId="nav-devis" />
-            </div>
+              <NavLink to="/devis" label={t('nav.devis', lang)} dataTestId="nav-devis" />              <NavLink to="/about" label={t('ui.about', lang)} dataTestId="nav-about" />            </div>
           </div>
         </nav>
 
@@ -137,6 +138,8 @@ const AppContent = () => {
               <Route path="/formations" element={<FormationsCIPFARO />} />
               <Route path="/liens" element={<GestionLiens />} />
               <Route path="/devis" element={<FormadevisIntegration />} />
+              <Route path="/about" element={<About />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </main>

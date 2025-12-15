@@ -218,6 +218,134 @@ const translations = {
     es: "Consultoría",
   },
   "formadevis.other": { fr: "Autre", en: "Other", es: "Otro" },
+
+  // Common UI
+  "ui.loading": {
+    fr: "Chargement...",
+    en: "Loading...",
+    es: "Cargando...",
+  },
+  "ui.error": {
+    fr: "Erreur",
+    en: "Error",
+    es: "Error",
+  },
+  "ui.success": {
+    fr: "Succès",
+    en: "Success",
+    es: "Éxito",
+  },
+  "ui.warning": {
+    fr: "Attention",
+    en: "Warning",
+    es: "Advertencia",
+  },
+  "ui.close": {
+    fr: "Fermer",
+    en: "Close",
+    es: "Cerrar",
+  },
+  "ui.back": {
+    fr: "Retour",
+    en: "Back",
+    es: "Atrás",
+  },
+  "ui.home": {
+    fr: "Accueil",
+    en: "Home",
+    es: "Inicio",
+  },
+  "ui.about": {
+    fr: "À propos",
+    en: "About",
+    es: "Acerca de",
+  },
+
+  // 404 Page
+  "404.title": {
+    fr: "Page Non Trouvée",
+    en: "Page Not Found",
+    es: "Página no encontrada",
+  },
+  "404.code": {
+    fr: "Erreur 404",
+    en: "Error 404",
+    es: "Error 404",
+  },
+  "404.message": {
+    fr: "La page que vous cherchez n'existe pas ou a été supprimée.",
+    en: "The page you are looking for does not exist or has been deleted.",
+    es: "La página que busca no existe o ha sido eliminada.",
+  },
+  "404.button": {
+    fr: "Retourner au tableau de bord",
+    en: "Go back to dashboard",
+    es: "Volver al panel",
+  },
+
+  // Dashboard
+  "dashboard.title": {
+    fr: "Tableau de Bord",
+    en: "Dashboard",
+    es: "Panel de Control",
+  },
+  "dashboard.welcome": {
+    fr: "Bienvenue à Rufami",
+    en: "Welcome to Rufami",
+    es: "Bienvenido a Rufami",
+  },
+  "dashboard.desc": {
+    fr: "Votre bureau collaboratif modulaire et sécurisé",
+    en: "Your modular and secure collaborative office",
+    es: "Su oficina colaborativa modular y segura",
+  },
+
+  // About Page
+  "about.title": {
+    fr: "À Propos de Rufami",
+    en: "About Rufami",
+    es: "Acerca de Rufami",
+  },
+  "about.description": {
+    fr: "Rufami est une application collaborative multilingue construite avec React 19, Tailwind CSS et des technologies Azure modernes.",
+    en: "Rufami is a multilingual collaborative application built with React 19, Tailwind CSS and modern Azure technologies.",
+    es: "Rufami es una aplicación colaborativa multilingüe construida con React 19, Tailwind CSS y tecnologías Azure modernas.",
+  },
+  "about.features": {
+    fr: "Caractéristiques",
+    en: "Features",
+    es: "Características",
+  },
+  "about.feature1": {
+    fr: "✨ Design moderne avec animations fluides",
+    en: "✨ Modern design with smooth animations",
+    es: "✨ Diseño moderno con animaciones suaves",
+  },
+  "about.feature2": {
+    fr: "🌍 Support multilingue (FR/EN/ES)",
+    en: "🌍 Multilingual support (FR/EN/ES)",
+    es: "🌍 Soporte multilingüe (FR/EN/ES)",
+  },
+  "about.feature3": {
+    fr: "🔒 Chiffrement sécurisé (PBKDF2 + AES-GCM)",
+    en: "🔒 Secure encryption (PBKDF2 + AES-GCM)",
+    es: "🔒 Cifrado seguro (PBKDF2 + AES-GCM)",
+  },
+  "about.feature4": {
+    fr: "☁️ Déploiement sur Azure Static Web Apps",
+    en: "☁️ Deployment on Azure Static Web Apps",
+    es: "☁️ Implementación en Azure Static Web Apps",
+  },
+  "about.feature5": {
+    fr: "📱 Responsive et optimisé pour tous les appareils",
+    en: "📱 Responsive and optimized for all devices",
+    es: "📱 Responsive y optimizado para todos los dispositivos",
+  },
+  "about.feature6": {
+    fr: "🎯 Modules modulaires et facilement extensibles",
+    en: "🎯 Modular and easily extensible modules",
+    es: "🎯 Módulos modulares y fácilmente extensibles",
+  },
 };
 
 /**
