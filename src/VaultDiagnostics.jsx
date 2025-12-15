@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useLanguage } from './context/LanguageContext';
-import { t } from './i18n/translations';
 
 /**
  * Page de diagnostic pour les problèmes de Coffre-Fort
