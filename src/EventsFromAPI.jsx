@@ -1,11 +1,16 @@
 // Données initiales
 // À adapter selon votre backend
 import React, { useState } from 'react';
+// useAuth peut être indisponible dans certains contextes de test où le provider n'est pas monté.
+// On garde une intégration optionnelle.
+import { useAuth } from './AzureAuthProvider';
+import { createApiClient } from './api/apiClient';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import CoffreFort from "./CoffreFort.jsx";
 import CitoyenAction from "./CitoyenAction.jsx";
 import FormationsCIPFARO from "./FormationsCIPFARO.jsx";
 import GestionLiens from "./GestionLiens.jsx";
+import { useTheme, ThemeSwitch } from './context/ThemeContext';
 // Correction de l’URL d’API pour éviter l’erreur Failed to fetch (à adapter selon votre backend déployé)
 const API_URL = 'https://lemon-pebble-0d7cdbb10.2.azurestaticapps.net/api/events';
 
@@ -13,10 +18,10 @@ const API_URL = 'https://lemon-pebble-0d7cdbb10.2.azurestaticapps.net/api/events
 function Toast({ message, onClose }) {
   if (!message) return null;
   return (
-    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 min-w-[300px] max-w-lg bg-gradient-to-r from-green-500 via-green-400 to-green-600 text-white px-6 py-3 rounded-2xl shadow-2xl z-50 flex items-center gap-4 animate-fade-in">
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4" /></svg>
+    <div role="status" aria-live="polite" className="fixed bottom-4 left-1/2 transform -translate-x-1/2 min-w-[300px] max-w-lg bg-gradient-to-r from-green-500 via-green-400 to-green-600 text-white px-6 py-3 rounded-2xl shadow-2xl z-50 flex items-center gap-4 animate-fade-in">
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4" /></svg>
       <span className="flex-1 font-semibold text-lg">{message}</span>
-      <button onClick={onClose} className="ml-2 text-white font-bold text-2xl hover:text-green-300 transition">×</button>
+      <button aria-label="Fermer la notification" onClick={onClose} className="ml-2 text-white font-bold text-2xl hover:text-green-300 transition">×</button>
     </div>
   );
 }
@@ -38,9 +43,9 @@ function AlertBanner({ error, onClose, onRetry }) {
 
   if (!error) return null;
   return (
-    <div className={`fixed top-0 left-0 w-full max-w-2xl mx-auto bg-gradient-to-r from-red-700 via-red-600 to-red-500 text-white px-6 py-3 rounded-b-2xl shadow-2xl z-50 flex flex-col md:flex-row justify-between items-center animate-fade-in ${shaking ? 'animate-shake' : ''}`} style={{left: '50%', transform: 'translateX(-50%)'}}>
+    <div role="alert" aria-live="assertive" className={`fixed top-0 left-0 w-full max-w-2xl mx-auto bg-gradient-to-r from-red-700 via-red-600 to-red-500 text-white px-6 py-3 rounded-b-2xl shadow-2xl z-50 flex flex-col md:flex-row justify-between items-center animate-fade-in ${shaking ? 'animate-shake' : ''}`} style={{left: '50%', transform: 'translateX(-50%)'}}>
       <span className="flex items-center gap-4 text-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white drop-shadow-lg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         <span>
           <strong className="text-xl">Impossible de récupérer les données.</strong> <br />
           <span className="text-base">Vérifiez votre connexion ou réessayez.</span> <br />
@@ -48,10 +53,10 @@ function AlertBanner({ error, onClose, onRetry }) {
         </span>
       </span>
       <div className="flex gap-2 mt-2 md:mt-0">
-        <button onClick={handleCopy} className="bg-white text-red-600 px-3 py-1 rounded-lg font-bold shadow hover:bg-red-100 transition">Copier</button>
-        {onRetry && <button onClick={onRetry} className="bg-white text-red-600 px-3 py-1 rounded-lg font-bold shadow hover:bg-red-100 transition">Réessayer</button>}
-        <a href="https://faq.rufami.fr" target="_blank" rel="noopener noreferrer" className="bg-white text-blue-600 px-3 py-1 rounded-lg font-bold shadow hover:bg-blue-100 transition">FAQ</a>
-        <button onClick={onClose} className="ml-2 text-white font-bold text-2xl hover:text-red-300 transition">×</button>
+        <button onClick={handleCopy} aria-label="Copier le message d'erreur" className="bg-white text-red-600 px-3 py-1 rounded-lg font-bold shadow hover:bg-red-100 transition">Copier</button>
+        {onRetry && <button onClick={onRetry} aria-label="Réessayer le chargement" className="bg-white text-red-600 px-3 py-1 rounded-lg font-bold shadow hover:bg-red-100 transition">Réessayer</button>}
+        <a href="https://faq.rufami.fr" target="_blank" rel="noopener noreferrer" className="bg-white text-blue-600 px-3 py-1 rounded-lg font-bold shadow hover:bg-blue-100 transition" aria-label="Ouvrir la FAQ dans un nouvel onglet">FAQ</a>
+        <button onClick={onClose} aria-label="Fermer l'alerte" className="ml-2 text-white font-bold text-2xl hover:text-red-300 transition">×</button>
       </div>
       <style>{`
         @keyframes shake {
@@ -70,17 +75,6 @@ function AlertBanner({ error, onClose, onRetry }) {
   );
 }
 
-// Switch thème
-function ThemeSwitch({ theme, setTheme }) {
-  return (
-    <button
-      className={`mb-4 px-3 py-1 rounded ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-800'}`}
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-    >
-      {theme === 'dark' ? 'Mode clair' : 'Mode sombre'}
-    </button>
-  );
-}
 // Données initiales
 const defaultEvents = [
   { id: 1, title: 'Réunion projet', date: '2025-10-12' },
@@ -231,14 +225,10 @@ function DashboardPresentation() {
 }
 
 const EventsFromAPI = () => {
-  const [theme, setTheme] = useState('light');
+  const { theme } = useTheme();
   const [toast, setToast] = useState('');
   const [error, setError] = useState('');
   const [events, setEvents] = useLocalStorage('agendaEvents', defaultEvents);
-
-  React.useEffect(() => {
-    document.body.className = theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900';
-  }, [theme]);
 
   const showToast = msg => {
     setToast(msg);
@@ -249,14 +239,19 @@ const EventsFromAPI = () => {
     setTimeout(() => setError(''), 5000);
   };
 
+  // useAuth appelé inconditionnellement, puis on gère l'erreur
+  const rawAuth = useAuth();
+  const auth = rawAuth || null;
+  const getToken = auth?.getToken;
+  const isAuthenticated = auth?.isAuthenticated;
+  const api = createApiClient({ baseUrl: API_URL.replace(/\/events$/, ''), getToken });
+
   const fetchEventsFromAPI = async () => {
     try {
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error('Réponse non valide');
-      const data = await res.json();
+      const data = await api.get('/events');
       if (Array.isArray(data)) {
         setEvents(data);
-        showToast('Événements chargés depuis l’API !');
+        showToast(`Événements chargés depuis l’API${isAuthenticated ? ' (auth)' : ''} !`);
       } else {
         showError('Format de données inattendu.');
       }
@@ -284,7 +279,7 @@ const EventsFromAPI = () => {
           <a href="#formations" className="flex items-center gap-2 hover:bg-blue-200 dark:hover:bg-gray-700 px-3 py-2 rounded-xl transition font-semibold"><i className="fas fa-graduation-cap text-green-500"></i> Formations CIPFARO</a>
         </nav>
         <div className="mt-auto pt-8">
-          <ThemeSwitch theme={theme} setTheme={setTheme} />
+          <ThemeSwitch />
         </div>
       </aside>
       {/* Tableau de bord */}

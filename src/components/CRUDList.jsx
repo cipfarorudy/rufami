@@ -20,13 +20,21 @@ export default function CRUDList({
   title = 'Liste',
   itemRender,
   onChange,
-  showToast
+  onItemsChange, // priorité sur onChange si fourni (API contrôlée)
+  controlledItems,
+  showToast,
+  itemTestId
 }) {
-  const [items, setItems] = storageKey
-    ? useLocalStorage(storageKey, initialItems)
-    : useState(initialItems);
+  // Tous les hooks appelés inconditionnellement
+  const internalState = useLocalStorage(storageKey || null, initialItems);
   const [form, setForm] = useState(() => emptyForm(fields));
   const [editIndex, setEditIndex] = useState(null);
+  
+  // Décider quelle source d'état utiliser après les hooks (pas de condition avant)
+  const isControlled = controlledItems !== undefined;
+  const [items, setItems] = isControlled 
+    ? [controlledItems, (v) => { /* noop for controlled */ }] 
+    : internalState;
 
   function emptyForm(flds) {
     return flds.reduce((acc, f) => ({ ...acc, [f.name]: '' }), {});
@@ -34,16 +42,22 @@ export default function CRUDList({
 
   function notify(msg) { if (showToast) showToast(msg); }
 
-  function persist(newItems) {
-    setItems(newItems);
-    if (onChange) onChange(newItems);
+  async function persist(newItems) {
+    if (controlledItems !== undefined) {
+      if (onItemsChange) await onItemsChange(newItems);
+      else if (onChange) await onChange(newItems);
+    } else {
+      setItems(newItems);
+      if (onItemsChange) await onItemsChange(newItems);
+      else if (onChange) await onChange(newItems);
+    }
   }
 
-  function handleAdd(e) {
+  async function handleAdd(e) {
     e.preventDefault();
     if (!fields.every(f => form[f.name] !== '')) return;
     const newItems = [...items, form];
-    persist(newItems);
+    await persist(newItems);
     setForm(emptyForm(fields));
     notify('Ajouté');
   }
@@ -53,19 +67,19 @@ export default function CRUDList({
     setForm(items[idx]);
   }
 
-  function handleUpdate(e) {
+  async function handleUpdate(e) {
     e.preventDefault();
     if (editIndex === null) return;
     const newItems = items.map((it, i) => i === editIndex ? { ...it, ...form } : it);
-    persist(newItems);
+    await persist(newItems);
     setEditIndex(null);
     setForm(emptyForm(fields));
     notify('Modifié');
   }
 
-  function handleDelete(idx) {
+  async function handleDelete(idx) {
     const newItems = items.filter((_, i) => i !== idx);
-    persist(newItems);
+    await persist(newItems);
     notify('Supprimé');
   }
 
@@ -77,27 +91,38 @@ export default function CRUDList({
   return (
     <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow mt-4">
       <h2 className="text-lg font-bold mb-2">{title}</h2>
-      <form onSubmit={editIndex === null ? handleAdd : handleUpdate} className="flex flex-col md:flex-row gap-2 mb-4">
-        {fields.map(f => f.type === 'select' ? (
-          <select
-            key={f.name}
-            value={form[f.name]}
-            onChange={e => setForm(old => ({ ...old, [f.name]: e.target.value }))}
-            className="px-2 py-1 rounded border"
-          >
-            <option value="" disabled>Choisir...</option>
-            {(f.options || []).map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-          </select>
-        ) : (
-          <input
-            key={f.name}
-            type={f.type || 'text'}
-            placeholder={f.label}
-            value={form[f.name]}
-            onChange={e => setForm(old => ({ ...old, [f.name]: e.target.value }))}
-            className="px-2 py-1 rounded border"
-          />
-        ))}
+      <form onSubmit={editIndex === null ? handleAdd : handleUpdate} className="flex flex-col md:flex-row gap-2 mb-4" aria-labelledby="crudlist-title">
+        {fields.map(f => {
+          const id = `${storageKey || title}-${f.name}`;
+          return f.type === 'select' ? (
+            <div key={f.name} className="flex flex-col">
+              <label htmlFor={id} className="sr-only">{f.label}</label>
+              <select
+                id={id}
+                aria-label={f.label}
+                value={form[f.name]}
+                onChange={e => setForm(old => ({ ...old, [f.name]: e.target.value }))}
+                className="px-2 py-1 rounded border"
+              >
+                <option value="" disabled>Choisir...</option>
+                {(f.options || []).map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+              </select>
+            </div>
+          ) : (
+            <div key={f.name} className="flex flex-col">
+              <label htmlFor={id} className="sr-only">{f.label}</label>
+              <input
+                id={id}
+                type={f.type || 'text'}
+                placeholder={f.label}
+                aria-label={f.label}
+                value={form[f.name]}
+                onChange={e => setForm(old => ({ ...old, [f.name]: e.target.value }))}
+                className="px-2 py-1 rounded border"
+              />
+            </div>
+          );
+        })}
         <button type="submit" className="bg-blue-600 text-white px-3 py-1 rounded">
           {editIndex === null ? 'Ajouter' : 'Modifier'}
         </button>
@@ -107,7 +132,7 @@ export default function CRUDList({
       </form>
       <ul className="space-y-2">
         {items.map((item, idx) => (
-          <li key={idx} className="flex flex-col md:flex-row items-center justify-between bg-white dark:bg-gray-700 p-2 rounded shadow">
+          <li key={idx} className="flex flex-col md:flex-row items-center justify-between bg-white dark:bg-gray-700 p-2 rounded shadow" {...(itemTestId ? { 'data-testid': itemTestId } : {})}>
             <div className="flex-1">
               {itemRender ? itemRender(item) : (
                 <span className="font-semibold">{Object.values(item).join(' — ')}</span>
